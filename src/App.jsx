@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import RadicalLine from './RadicalLine'
+import SelectedRadicalsContainer from './SelectedRadicalsContainer'
+
 import radicals from './assets/radicals'
+import charsWithRadicals from './assets/charsWithRadicals'
 
 class App extends Component {         
   state = {
+    selectedRadicals: []
   }
+
   getRadicals = () => {
     let arr = [], radicalsArr = []
     let strokes, prevStrokes = "1"
@@ -21,7 +26,10 @@ class App extends Component {
   }
 
   radicalClick = (radical) => {
-    console.log(`${radical} clicked`)
+    if (!this.state.selectedRadicals.includes(radical)) {
+      let _radicals = [radical, ...this.state.selectedRadicals]
+      this.setState({selectedRadicals: _radicals})
+    }
   }
 
   render() {
@@ -34,6 +42,7 @@ class App extends Component {
             radicalClicked={this.radicalClick}
           />
         ) }
+      <SelectedRadicalsContainer selected={this.state.selectedRadicals} />
       </div>
     );
   }
