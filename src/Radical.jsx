@@ -2,11 +2,10 @@ import React from 'react'
 
 export default class Radical extends React.Component {
   render() {
-    const { radical } = this.props
+    const { radicalClicked, radical } = this.props
     return (
-      <div>
-        {radical.strokes} {radical.char}
-      </div>
+      <span onClick={() => radicalClicked(radical.char)}>{radical.char}</span>
     )
-  }
+  } 
 }
+

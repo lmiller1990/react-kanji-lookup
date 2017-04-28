@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import RadicalLine from './RadicalLine'
-import radicals from './radicals'
+import radicals from './assets/radicals'
 
 class App extends Component {         
   state = {
@@ -20,16 +20,19 @@ class App extends Component {
     return arr
   }
 
-  shouldLineBreak = (strokeCount) => {
-    return this.state.previousStroke !== strokeCount ?
-      '<br />' : ''
+  radicalClick = (radical) => {
+    console.log(`${radical} clicked`)
   }
 
   render() {
     return (
       <div>
         { this.getRadicals().map(radicalLine => 
-          <RadicalLine key={radicalLine.id} radicalLine={radicalLine.radicalsArr} />
+          <RadicalLine 
+            key={radicalLine.id} 
+            radicalLine={radicalLine.radicalsArr} 
+            radicalClicked={this.radicalClick}
+          />
         ) }
       </div>
     );

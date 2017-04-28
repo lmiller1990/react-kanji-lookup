@@ -822,47 +822,47 @@ export default
   },
   {
     "strokes": "8",
-    "char": "金部",
+    "char": "金",
     "name": "かね、かねへん"
   },
   {
     "strokes": "8",
-    "char": "長部",
+    "char": "長",
     "name": "ながい"
   },
   {
     "strokes": "8",
-    "char": "門部",
+    "char": "門",
     "name": "もん、もんがまえ"
   },
   {
     "strokes": "8",
-    "char": "阜部",
+    "char": "阜",
     "name": "おか、こざとへん"
   },
   {
     "strokes": "8",
-    "char": "隶部",
+    "char": "隶",
     "name": "れいづくり"
   },
   {
     "strokes": "8",
-    "char": "隹部",
+    "char": "隹",
     "name": "ふるとり"
   },
   {
     "strokes": "8",
-    "char": "雨部",
+    "char": "雨",
     "name": "あめ、あめかんむり"
   },
   {
     "strokes": "8",
-    "char": "青部",
+    "char": "青",
     "name": "あお"
   },
   {
     "strokes": "8",
-    "char": "非部",
+    "char": "非",
     "name": "あらず"
   },
   {
