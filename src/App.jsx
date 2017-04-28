@@ -1,26 +1,23 @@
 import React, { Component } from 'react';
-import Radical from './Radical'
+import RadicalLine from './RadicalLine'
 import radicals from './radicals'
 
 class App extends Component {         
   state = {
   }
   getRadicals = () => {
-    let arr = [], temp = []
+    let arr = [], radicalsArr = []
     let strokes, prevStrokes = "1"
     for (let r in radicals)  {
       strokes = radicals[r].strokes  
-      temp.push(radicals[r])
+      radicalsArr.push({ id: r, ...radicals[r] })
       if (radicals[r].strokes !== prevStrokes) {
-        arr.push(temp)
-        temp = []
+        arr.push({ id: prevStrokes, radicalsArr })
+        radicalsArr = []
         prevStrokes = strokes
       }
     }
-  }
-
-  componentDidMount() {
-    this.getRadicals()
+    return arr
   }
 
   shouldLineBreak = (strokeCount) => {
@@ -31,6 +28,9 @@ class App extends Component {
   render() {
     return (
       <div>
+        { this.getRadicals().map(radicalLine => 
+          <RadicalLine key={radicalLine.id} radicalLine={radicalLine.radicalsArr} />
+        ) }
       </div>
     );
   }
