@@ -11,7 +11,10 @@ class App extends Component {
     matchedKanji: []
   }
 
-  getRadicals = () => {
+  // sort radicals into arrays by radical.
+  // [ [ one stroke radicals ], [ two stroke radicals ] ] 
+  // and so on.
+  getRadicalsByStroke = () => {
     let arr = [], radicalsArr = []
     let strokes, prevStrokes = "1"
     for (let r in radicals)  {
@@ -26,10 +29,8 @@ class App extends Component {
     return arr
   }
 
-  componentDidUpdate() {
-    // console.log(this.state.selectedRadicals)
-  }
-
+  // every time a new radical is selected, check for characters containing
+  // all selected radicals. Output how long it took.
   checkForCharactersContainingRadicals() {
     console.time("search")
     let sel = this.state.selectedRadicals
@@ -56,7 +57,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        { this.getRadicals().map(radicalLine => 
+        { this.getRadicalsByStroke().map(radicalLine => 
           <RadicalLine 
             key={radicalLine.id} 
             radicalLine={radicalLine.radicalsArr} 
