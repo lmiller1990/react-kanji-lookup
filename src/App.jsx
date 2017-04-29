@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
-import RadicalLine from './RadicalLine'
+import React, { Component } from 'react'
+import RadicalLine          from './RadicalLine'
 import SelectedRadicalsContainer from './SelectedRadicalsContainer'
 
-import radicals from './assets/radicals'
+import radicals          from './assets/radicals'
 import charsWithRadicals from './assets/charsWithRadicals'
+// import dictionary        from './assets/edict'
 
 class App extends Component {         
   state = {
@@ -11,6 +12,9 @@ class App extends Component {
     matchedKanji: []
   }
 
+  componentDidMount() {
+    //console.log(dictionary.length)
+  }
   // sort radicals into arrays by radical.
   // [ [ one stroke radicals ], [ two stroke radicals ] ] 
   // and so on.
@@ -51,7 +55,6 @@ class App extends Component {
       this.setState({selectedRadicals: _radicals},
         () => this.checkForCharactersContainingRadicals())
     }
-
   }
 
   render() {
@@ -70,4 +73,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default App
