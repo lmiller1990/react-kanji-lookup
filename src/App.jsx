@@ -7,7 +7,8 @@ import charsWithRadicals from './assets/charsWithRadicals'
 
 class App extends Component {         
   state = {
-    selectedRadicals: []
+    selectedRadicals: [],
+    matchedKanji: []
   }
 
   getRadicals = () => {
@@ -25,11 +26,31 @@ class App extends Component {
     return arr
   }
 
+  componentDidUpdate() {
+    // console.log(this.state.selectedRadicals)
+  }
+
+  checkForCharactersContainingRadicals() {
+    console.time("search")
+    let sel = this.state.selectedRadicals
+    let matched = []
+    for (let c in charsWithRadicals) {
+      if (sel.every(val => charsWithRadicals[c].radicals.includes(val)))  {
+        matched.push(charsWithRadicals[c].character)
+      }
+    }
+    console.log(matched)
+    this.setState({matchedKanji: matched})
+    console.timeEnd("search")
+  }
+
   radicalClick = (radical) => {
     if (!this.state.selectedRadicals.includes(radical)) {
       let _radicals = [radical, ...this.state.selectedRadicals]
-      this.setState({selectedRadicals: _radicals})
+      this.setState({selectedRadicals: _radicals},
+        () => this.checkForCharactersContainingRadicals())
     }
+
   }
 
   render() {
