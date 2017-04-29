@@ -4,7 +4,6 @@ import SelectedRadicalsContainer from './SelectedRadicalsContainer'
 
 import radicals          from './assets/radicals'
 import charsWithRadicals from './assets/charsWithRadicals'
-// import dictionary        from './assets/edict'
 
 class App extends Component {         
   state = {
@@ -13,6 +12,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    const db = new Loki('loki.json')
     //console.log(dictionary.length)
   }
   // sort radicals into arrays by radical.
