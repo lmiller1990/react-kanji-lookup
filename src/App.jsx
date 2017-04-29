@@ -11,10 +11,6 @@ class App extends Component {
     matchedKanji: []
   }
 
-  componentDidMount() {
-    const db = new Loki('loki.json')
-    //console.log(dictionary.length)
-  }
   // sort radicals into arrays by radical.
   // [ [ one stroke radicals ], [ two stroke radicals ] ] 
   // and so on.
