@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import RadicalLine          from './RadicalLine'
 import SelectedRadicalsContainer from './SelectedRadicalsContainer'
+import WordSearchContainer       from './WordSearchContainer'
+import axios from 'axios'
 
-import radicals          from './assets/radicals'
+import radicals          from './assets/allRadical'
 import charsWithRadicals from './assets/charsWithRadicals'
 
 class App extends Component {         
@@ -11,22 +13,35 @@ class App extends Component {
     matchedKanji: []
   }
 
-  // sort radicals into arrays by radical.
-  // [ [ one stroke radicals ], [ two stroke radicals ] ] 
-  // and so on.
+  componentDidMount() {
+    axios.get('/japanese_words/', {
+      params: {
+        characters: ['漢','字']
+      }
+    }).then((res) => {
+      for (let r in res.data) {
+        if (r < 5)
+          console.log(res.data[r].word, res.data[r].meaning)
+      }
+    })
+  }
+
   getRadicalsByStroke = () => {
-    let arr = [], radicalsArr = []
-    let strokes, prevStrokes = "1"
-    for (let r in radicals)  {
-      strokes = radicals[r].strokes  
-      radicalsArr.push({ id: r, ...radicals[r] })
-      if (radicals[r].strokes !== prevStrokes) {
-        arr.push({ id: prevStrokes, radicalsArr })
-        radicalsArr = []
-        prevStrokes = strokes
+    // get all stroke couts
+    let strokeCounts = [] 
+    for (let r in radicals) {
+      if (!strokeCounts.includes(radicals[r].strokes)) {
+        strokeCounts.push(radicals[r].strokes)
       }
     }
-    return arr
+    let lines = []
+    for (let s in strokeCounts) {
+      lines.push({ id: s, radicals: [] })
+    }
+    for (let r in radicals) {
+      lines[radicals[r].strokes - 1].radicals.push({ char: r, ...radicals[r] })
+    }
+    return lines
   }
 
   // every time a new radical is selected, check for characters containing
@@ -59,11 +74,12 @@ class App extends Component {
         { this.getRadicalsByStroke().map(radicalLine => 
           <RadicalLine 
             key={radicalLine.id} 
-            radicalLine={radicalLine.radicalsArr} 
+            radicalLine={radicalLine.radicals} 
             radicalClicked={this.radicalClick}
           />
         ) }
-      <SelectedRadicalsContainer selected={this.state.selectedRadicals} />
+        <SelectedRadicalsContainer selected={this.state.selectedRadicals} />
+        <WordSearchContainer selected={this.state.selectedRadicals} />
       </div>
     );
   }

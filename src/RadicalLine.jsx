@@ -8,8 +8,8 @@ export default class RadicalLine extends React.Component {
     for (let r in radicalLine) {
       renderList.push(
         <Radical 
-          key={radicalLine[r].id} 
-          radical={radicalLine[r]} 
+          key={radicalLine[r].char} 
+          radical={radicalLine[r].char} 
           radicalClicked={radicalClicked}
         />
       )
