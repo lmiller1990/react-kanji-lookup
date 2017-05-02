@@ -4,31 +4,36 @@ import SelectedRadicalsContainer from './SelectedRadicalsContainer'
 import WordSearchContainer       from './WordSearchContainer'
 import axios from 'axios'
 
-import radicals          from './assets/allRadical'
+//import radicals          from './assets/allRadical'
 import charsWithRadicals from './assets/charsWithRadicals'
 
 class App extends Component {         
   state = {
     selectedRadicals: [],
-    matchedKanji: []
+    matchedKanji: [],
+    radicals: []
   }
 
   componentDidMount() {
-    axios.get('/japanese_words/', {
+    axios.get('/radicals/index')
+      .then((res) => {
+        this.setState({ radicals: res.data })
+      })
+  }
+
+  queryApi() {
+    axios.get('/japanese_words/words_by_radicals', {
+      data: {},
       params: {
-        characters: ['漢','字']
+        radicals: this.state.selectedRadicals
       }
-    }).then((res) => {
-      for (let r in res.data) {
-        if (r < 5)
-          console.log(res.data[r].word, res.data[r].meaning)
-      }
-    })
+    }).then((res) => { console.log(res) })
   }
 
   getRadicalsByStroke = () => {
     // get all stroke couts
     let strokeCounts = [] 
+    let radicals = this.state.radicals
     for (let r in radicals) {
       if (!strokeCounts.includes(radicals[r].strokes)) {
         strokeCounts.push(radicals[r].strokes)
@@ -63,6 +68,7 @@ class App extends Component {
   radicalClick = (radical) => {
     if (!this.state.selectedRadicals.includes(radical)) {
       let _radicals = [radical, ...this.state.selectedRadicals]
+      console.log(_radicals)
       this.setState({selectedRadicals: _radicals},
         () => this.checkForCharactersContainingRadicals())
     }
@@ -80,6 +86,7 @@ class App extends Component {
         ) }
         <SelectedRadicalsContainer selected={this.state.selectedRadicals} />
         <WordSearchContainer selected={this.state.selectedRadicals} />
+        <button onClick={() => {this.queryApi()}}>Query</button>
       </div>
     );
   }
