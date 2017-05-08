@@ -1,0 +1,9 @@
+.radical.character:hover {
+  background-color: grey;  
+}
+
+.radical.character {
+  display: inline-block;
+  border: 1px gray solid;
+  margin-right: 0.1em;
+}

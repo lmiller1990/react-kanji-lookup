@@ -3,6 +3,7 @@ import RadicalLine          from './RadicalLine'
 import SelectedRadicalsContainer from './SelectedRadicalsContainer'
 import WordSearchContainer       from './WordSearchContainer'
 import axios from 'axios'
+import './styles/app.css'
 
 //import radicals          from './assets/allRadical'
 import charsWithRadicals from './assets/charsWithRadicals'
@@ -76,7 +77,7 @@ class App extends Component {
 
   render() {
     return (
-      <div>
+      <div className="app">
         { this.getRadicalsByStroke().map(radicalLine => 
           <RadicalLine 
             key={radicalLine.id} 
