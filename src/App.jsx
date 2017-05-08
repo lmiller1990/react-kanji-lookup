@@ -5,14 +5,14 @@ import WordSearchContainer       from './WordSearchContainer'
 import axios from 'axios'
 import './styles/app.css'
 
-//import radicals          from './assets/allRadical'
 import charsWithRadicals from './assets/charsWithRadicals'
 
 class App extends Component {         
   state = {
     selectedRadicals: [],
     matchedKanji: [],
-    radicals: []
+    radicals: [],
+    words: []
   }
 
   componentDidMount() {
@@ -28,7 +28,7 @@ class App extends Component {
       params: {
         radicals: this.state.selectedRadicals
       }
-    }).then((res) => { console.log(res) })
+    }).then((res) => { console.log(res); this.setState({ words: res.data }) })
   }
 
   getRadicalsByStroke = () => {
@@ -78,16 +78,21 @@ class App extends Component {
   render() {
     return (
       <div className="app">
-        { this.getRadicalsByStroke().map(radicalLine => 
-          <RadicalLine 
-            key={radicalLine.id} 
-            radicalLine={radicalLine.radicals} 
-            radicalClicked={this.radicalClick}
-          />
-        ) }
-        <SelectedRadicalsContainer selected={this.state.selectedRadicals} />
-        <WordSearchContainer selected={this.state.selectedRadicals} />
-        <button onClick={() => {this.queryApi()}}>Query</button>
+        <div className="radical select area">
+          { this.getRadicalsByStroke().map(radicalLine => 
+            <RadicalLine 
+              key={radicalLine.id} 
+              radicalLine={radicalLine.radicals} 
+              radicalClicked={this.radicalClick}
+            />
+          ) }
+          <SelectedRadicalsContainer selected={this.state.selectedRadicals} />
+          <WordSearchContainer selected={this.state.selectedRadicals} />
+          <button onClick={() => {this.queryApi()}}>Query</button>
+        </div>
+        <div className="result area">
+          Resutl
+        </div>
       </div>
     );
   }
