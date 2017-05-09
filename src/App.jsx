@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import RadicalLine          from './RadicalLine'
 import SelectedRadicalsContainer from './SelectedRadicalsContainer'
-import WordSearchContainer       from './WordSearchContainer'
+import ResultContainer      from './ResultContainer'
 import axios from 'axios'
 import './styles/app.css'
 
@@ -28,7 +28,11 @@ class App extends Component {
       params: {
         radicals: this.state.selectedRadicals
       }
-    }).then((res) => { console.log(res); this.setState({ words: res.data }) })
+    }).then((res) => { 
+      console.log(res) 
+      res.data.sort((a, b) => a.word.length > b.word.length)
+      this.setState({ words: res.data }) 
+    })
   }
 
   getRadicalsByStroke = () => {
@@ -87,12 +91,12 @@ class App extends Component {
             />
           ) }
           <SelectedRadicalsContainer selected={this.state.selectedRadicals} />
-          <WordSearchContainer selected={this.state.selectedRadicals} />
           <button onClick={() => {this.queryApi()}}>Query</button>
         </div>
-        <div className="result area">
-          Resutl
-        </div>
+        <ResultContainer 
+          className="result area" 
+          words={this.state.words}
+        />
       </div>
     );
   }

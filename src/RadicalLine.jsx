@@ -3,6 +3,10 @@ import Radical from './Radical'
 import './styles/radical-line.css' 
 
 export default class RadicalLine extends React.Component {
+  shouldComponentUpdate() {
+    return false // never need to update, the radicals never change.
+  }
+
   render() {
     const { radicalLine, radicalClicked } = this.props
     let renderList = []
