@@ -26,4 +26,4 @@ export default class ResultContainer extends React.Component {
       </div>
     )
   }
-}
+a
