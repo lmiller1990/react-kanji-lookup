@@ -30,9 +30,13 @@ class App extends Component {
       }
     }).then((res) => { 
       console.log(res) 
-      res.data.sort((a, b) => a.word.length > b.word.length)
-      this.setState({ words: res.data }) 
+      let data = res.data.sort((a, b) => a.word.length > b.word.length ? 1 : -1)
+      this.setState({ words: data }) 
     })
+  }
+
+  clearSelectedRadicals() {
+    this.setState({ selectedRadicals: [] })
   }
 
   getRadicalsByStroke = () => {
@@ -82,6 +86,10 @@ class App extends Component {
   render() {
     return (
       <div className="app">
+        <button onClick={() => {this.queryApi()}}>Query</button>
+        <button onClick={() => {this.clearSelectedRadicals()}}>Clear</button>
+        <SelectedRadicalsContainer selected={this.state.selectedRadicals} />
+
         <div className="radical select area">
           { this.getRadicalsByStroke().map(radicalLine => 
             <RadicalLine 
@@ -90,8 +98,6 @@ class App extends Component {
               radicalClicked={this.radicalClick}
             />
           ) }
-          <SelectedRadicalsContainer selected={this.state.selectedRadicals} />
-          <button onClick={() => {this.queryApi()}}>Query</button>
         </div>
         <ResultContainer 
           className="result area" 

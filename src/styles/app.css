@@ -11,4 +11,5 @@
 .radical.select.area {
   float: left;
   display: inline-block;
+  padding-top: 1em;
 }
