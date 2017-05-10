@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import RadicalLine          from './RadicalLine'
 import SelectedRadicalsContainer from './SelectedRadicalsContainer'
 import ResultContainer      from './ResultContainer'
+import RadicalInput         from './RadicalInput'
 import axios from 'axios'
 import './styles/app.css'
 
@@ -74,6 +75,12 @@ class App extends Component {
     console.timeEnd("search")
   }
 
+  handleEnterPressed = (event, radicals) => {
+    if (event.which === 13) {
+      console.log(`Search by name ${radicals.split("に")}`)
+    }
+  }
+
   radicalClick = (radical) => {
     if (!this.state.selectedRadicals.includes(radical)) {
       let _radicals = [radical, ...this.state.selectedRadicals]
@@ -86,6 +93,7 @@ class App extends Component {
   render() {
     return (
       <div className="app">
+        <RadicalInput enterPressed={this.handleEnterPressed} />
         <button onClick={() => {this.queryApi()}}>Query</button>
         <button onClick={() => {this.clearSelectedRadicals()}}>Clear</button>
         <SelectedRadicalsContainer selected={this.state.selectedRadicals} />
