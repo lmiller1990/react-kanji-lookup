@@ -23,6 +23,15 @@ class App extends Component {
       })
   }
 
+  queryForDefintion(word) {
+    axios.get('/japanese_words/meaning', {
+      data: {},
+      params: {
+        word: word
+      }
+    }).then((res) => { console.log(res) })
+  }
+
   queryApi() {
     axios.get('/japanese_words/words_by_radicals', {
       data: {},
@@ -75,9 +84,11 @@ class App extends Component {
     console.timeEnd("search")
   }
 
-  handleEnterPressed = (event, radicals) => {
+  handleEnterPressed = (event, query) => {
     if (event.which === 13) {
-      console.log(`Search by name ${radicals.split("に")}`)
+      this.queryForDefintion(query)
+      // console.log(this.state.query)
+      // console.log(`Search by name ${radicals.split("に")}`)
     }
   }
 
