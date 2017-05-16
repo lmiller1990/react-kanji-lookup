@@ -23,13 +23,25 @@ class App extends Component {
       })
   }
 
+  queryByKanjiAndRadicals(kanji, radicals) {
+    axios.get('japanese_words/meaning_by_kanji_and_radicals',{
+      params: {
+        kanji: kanji,
+        radicals: radicals
+      }
+    }).then((res) => { console.log(res.data) })
+  }
+
   queryForDefintion(word) {
     axios.get('/japanese_words/meaning', {
       data: {},
       params: {
         word: word
       }
-    }).then((res) => { console.log(res) })
+    }).then((res) => { 
+      console.log(res) 
+      this.setState({ words: res.data })
+    })
   }
 
   queryApi() {
@@ -85,11 +97,18 @@ class App extends Component {
   }
 
   handleEnterPressed = (event, query) => {
-    if (event.which === 13) {
-      this.queryForDefintion(query)
+    //if (event.which === 13) {
+      if (query.includes("<") || query.includes("＜")) {
+        // word search + radical
+        let queryArr = query.split(/<|＜/)
+        let _kanji = queryArr[0].split(/,|、/)
+        let _radicals = queryArr[1].split(/,|、/)
+        this.queryByKanjiAndRadicals(_kanji, _radicals)
+      }
+      //this.queryForDefintion(query)
       // console.log(this.state.query)
       // console.log(`Search by name ${radicals.split("に")}`)
-    }
+    //}
   }
 
   radicalClick = (radical) => {
@@ -106,9 +125,13 @@ class App extends Component {
       <div className="app">
         <RadicalInput enterPressed={this.handleEnterPressed} />
         <button onClick={() => {this.queryApi()}}>Query</button>
-        <button onClick={() => {this.clearSelectedRadicals()}}>Clear</button>
-        <SelectedRadicalsContainer selected={this.state.selectedRadicals} />
+        <button onClick={() => {this.handleEnterPressed}}>Go</button>
 
+        <ResultContainer 
+          className="result area" 
+          words={this.state.words}
+        />
+        {/*<SelectedRadicalsContainer selected={this.state.selectedRadicals} />
         <div className="radical select area">
           { this.getRadicalsByStroke().map(radicalLine => 
             <RadicalLine 
@@ -118,10 +141,7 @@ class App extends Component {
             />
           ) }
         </div>
-        <ResultContainer 
-          className="result area" 
-          words={this.state.words}
-        />
+        */}
       </div>
     );
   }

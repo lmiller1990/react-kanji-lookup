@@ -13,7 +13,7 @@ export default class ResultContainer extends React.Component {
               return (
                 <tr key={w.id}>
                   <td>
-                    {w.word}
+                    {w.word} ({w.hiragana})
                   </td>
                   <td>
                     {w.meaning}
