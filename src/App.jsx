@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import RadicalLine          from './RadicalLine'
-import SelectedRadicalsContainer from './SelectedRadicalsContainer'
 import ResultContainer      from './ResultContainer'
 import RadicalInput         from './RadicalInput'
 import axios from 'axios'
@@ -29,7 +27,9 @@ class App extends Component {
         kanji: kanji,
         radicals: radicals
       }
-    }).then((res) => { console.log(res.data) })
+    }).then((res) => { 
+      this.setState({ words: res.data })
+    })
   }
 
   queryForDefintion(word) {
@@ -97,18 +97,18 @@ class App extends Component {
   }
 
   handleEnterPressed = (event, query) => {
-    //if (event.which === 13) {
+    if (event.which === 13 || event.type === 'click') {
       if (query.includes("<") || query.includes("＜")) {
         // word search + radical
         let queryArr = query.split(/<|＜/)
         let _kanji = queryArr[0].split(/,|、/)
         let _radicals = queryArr[1].split(/,|、/)
         this.queryByKanjiAndRadicals(_kanji, _radicals)
+      } else {
+        // just a word
+        this.queryForDefintion(query)
       }
-      //this.queryForDefintion(query)
-      // console.log(this.state.query)
-      // console.log(`Search by name ${radicals.split("に")}`)
-    //}
+    }
   }
 
   radicalClick = (radical) => {
@@ -125,7 +125,6 @@ class App extends Component {
       <div className="app">
         <RadicalInput enterPressed={this.handleEnterPressed} />
         <button onClick={() => {this.queryApi()}}>Query</button>
-        <button onClick={() => {this.handleEnterPressed}}>Go</button>
 
         <ResultContainer 
           className="result area" 
