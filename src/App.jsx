@@ -21,11 +21,12 @@ class App extends Component {
       })
   }
 
-  queryByKanjiAndRadicals(kanji, radicals) {
+  queryByKanjiAndRadicals(kanji, radicals, length) {
     axios.get('japanese_words/meaning_by_kanji_and_radicals',{
       params: {
         kanji: kanji,
-        radicals: radicals
+        radicals: radicals,
+        length: length
       }
     }).then((res) => { 
       this.setState({ words: res.data })
@@ -39,7 +40,6 @@ class App extends Component {
         word: word
       }
     }).then((res) => { 
-      console.log(res) 
       this.setState({ words: res.data })
     })
   }
@@ -51,7 +51,6 @@ class App extends Component {
         radicals: this.state.selectedRadicals
       }
     }).then((res) => { 
-      console.log(res) 
       let data = res.data.sort((a, b) => a.word.length > b.word.length ? 1 : -1)
       this.setState({ words: data }) 
     })
@@ -98,12 +97,20 @@ class App extends Component {
 
   handleEnterPressed = (event, query) => {
     if (event.which === 13 || event.type === 'click') {
+      let _length = 0
+      if (query.includes("*") || query.includes("＊")) {
+        // length
+        let _q = query.split(/＊|\*/)
+        query = _q[0]
+        _length = _q[1]
+      }
+        
       if (query.includes("<") || query.includes("＜")) {
         // word search + radical
         let queryArr = query.split(/<|＜/)
         let _kanji = queryArr[0].split(/,|、/)
         let _radicals = queryArr[1].split(/,|、/)
-        this.queryByKanjiAndRadicals(_kanji, _radicals)
+        this.queryByKanjiAndRadicals(_kanji, _radicals, _length)
       } else {
         // just a word
         this.queryForDefintion(query)
