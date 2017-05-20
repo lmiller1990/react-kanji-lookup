@@ -1,15 +1,12 @@
 import React, { Component } from 'react'
 import ResultContainer      from './ResultContainer'
-import RadicalInput         from './RadicalInput'
+import QueryInput           from './QueryInput'
 import axios from 'axios'
 import './styles/app.css'
-
-import charsWithRadicals from './assets/charsWithRadicals'
+import { latin }            from './utils/query.js'
 
 class App extends Component {         
   state = {
-    selectedRadicals: [],
-    matchedKanji: [],
     radicals: [],
     words: []
   }
@@ -44,22 +41,6 @@ class App extends Component {
     })
   }
 
-  queryApi() {
-    axios.get('/japanese_words/words_by_radicals', {
-      data: {},
-      params: {
-        radicals: this.state.selectedRadicals
-      }
-    }).then((res) => { 
-      let data = res.data.sort((a, b) => a.word.length > b.word.length ? 1 : -1)
-      this.setState({ words: data }) 
-    })
-  }
-
-  clearSelectedRadicals() {
-    this.setState({ selectedRadicals: [] })
-  }
-
   getRadicalsByStroke = () => {
     // get all stroke couts
     let strokeCounts = [] 
@@ -79,75 +60,31 @@ class App extends Component {
     return lines
   }
 
-  // every time a new radical is selected, check for characters containing
-  // all selected radicals. Output how long it took.
-  checkForCharactersContainingRadicals() {
-    console.time("search")
-    let sel = this.state.selectedRadicals
-    let matched = []
-    for (let c in charsWithRadicals) {
-      if (sel.every(val => charsWithRadicals[c].radicals.includes(val)))  {
-        matched.push(charsWithRadicals[c].character)
-      }
-    }
-    console.log(matched)
-    this.setState({matchedKanji: matched})
-    console.timeEnd("search")
-  }
-
-  handleEnterPressed = (event, query) => {
+  query = (event, query) => {
     if (event.which === 13 || event.type === 'click') {
-      let _length = 0
-      if (query.includes("*") || query.includes("＊")) {
-        // length
-        let _q = query.split(/＊|\*/)
-        query = _q[0]
-        _length = _q[1]
-      }
-        
-      if (query.includes("<") || query.includes("＜")) {
-        // word search + radical
-        let queryArr = query.split(/<|＜/)
-        let _kanji = queryArr[0].split(/,|、/)
-        let _radicals = queryArr[1].split(/,|、/)
-        this.queryByKanjiAndRadicals(_kanji, _radicals, _length)
-      } else {
-        // just a word
-        this.queryForDefintion(query)
-      }
-    }
-  }
+      query = latin(query)
+      let _q = query.split("|")
 
-  radicalClick = (radical) => {
-    if (!this.state.selectedRadicals.includes(radical)) {
-      let _radicals = [radical, ...this.state.selectedRadicals]
-      console.log(_radicals)
-      this.setState({selectedRadicals: _radicals},
-        () => this.checkForCharactersContainingRadicals())
+      if (_q.length === 1) {
+        this.queryForDefintion(query)
+      } else if (_q.length > 1) {
+        let _kanji = _q[0].split(",")
+        let _radicals = _q[1].split(",")
+        let _length = _q[2] || 0
+        this.queryByKanjiAndRadicals(_kanji, _radicals, _length)
+      }
     }
   }
 
   render() {
     return (
       <div className="app">
-        <RadicalInput enterPressed={this.handleEnterPressed} />
-        <button onClick={() => {this.queryApi()}}>Query</button>
+        <QueryInput enterPressed={this.query} />
 
         <ResultContainer 
           className="result area" 
           words={this.state.words}
         />
-        {/*<SelectedRadicalsContainer selected={this.state.selectedRadicals} />
-        <div className="radical select area">
-          { this.getRadicalsByStroke().map(radicalLine => 
-            <RadicalLine 
-              key={radicalLine.id} 
-              radicalLine={radicalLine.radicals} 
-              radicalClicked={this.radicalClick}
-            />
-          ) }
-        </div>
-        */}
       </div>
     );
   }

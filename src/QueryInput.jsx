@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import icon from './assets/search.png'
 
 const styles = {
-  radicalInputContainer: {
+  queryInputContainer: {
     textAlign: 'center'
   },
   radicalInput: {
@@ -16,11 +16,11 @@ const styles = {
   }
 }
 
-export default class RadicalInput extends Component {
+export default class QueryInput extends Component {
   render() {
     const { enterPressed } = this.props
     return(
-      <div style={styles.radicalInputContainer}>
+      <div style={styles.queryInputContainer}>
         Search Anything 
         <div>
             <input 
